@@ -124,7 +124,7 @@ timeOut.addEventListener('change', onChangeTimeOut);
 
 //SLIDER
 const slider = document.querySelector('.ad-form__slider');
-
+const sliderInput = document.querySelector('#price');
 
 noUiSlider.create(slider, {
   range: {
@@ -146,6 +146,10 @@ noUiSlider.create(slider, {
 
 slider.noUiSlider.on('update', () => {
   typePrice.value = slider.noUiSlider.get();
+});
+
+sliderInput.addEventListener('change', () => {
+  slider.noUiSlider.set(sliderInput.value);
 });
 
 export {disableForm, enableForm};
