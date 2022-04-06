@@ -1,0 +1,29 @@
+const MAX_ADS = 10;
+const MAX_GUEST = 100;
+const MAX_ROOMS = 7;
+const MAX_PRICE = 100000;
+const MIN_ROOM = 0;
+const LAT_TOKIO = 35.69188;
+const LNG_TOKIO = 139.76017;
+const MAP_SCALING = 12;
+const PIN_SIZE = 52;
+const ROUDING_VALUE = 5;
+const AD_PIN_SIZE = 40;
+const ALERT_SHOW_TIME = 7000;
+const PLACE_HOLDER = 5000;
+
+export {
+  MAX_ADS,
+  MAX_GUEST,
+  MAX_ROOMS,
+  MAX_PRICE,
+  MIN_ROOM,
+  LAT_TOKIO,
+  LNG_TOKIO,
+  MAP_SCALING,
+  PIN_SIZE,
+  ROUDING_VALUE,
+  AD_PIN_SIZE,
+  ALERT_SHOW_TIME,
+  PLACE_HOLDER
+};
