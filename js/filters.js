@@ -1,5 +1,5 @@
-import {priceValue} from './enum.js';
-import {MAX_ADS, DEFAULT_VALUE_FILTER, RERENDER_DELAY} from './data.js';
+import {priceValue} from './limits.js';
+import {MAX_ADS, DEFAULT_VALUE_FILTER, RENDER_DELAY} from './data.js';
 import {getData} from './server.js';
 import {markerGroup, createMarkers} from './map.js';
 import {debounce} from './debounce.js';
@@ -50,16 +50,16 @@ const checkGuests = (ad) => {
 
 const checkFeatures = (ad) => {
   const checkedCheckboxes = document.querySelector('#housing-features').querySelectorAll('[name="features"]:checked');
-  const checkedBox = [];
+  const listCheckedBox = [];
 
   checkedCheckboxes.forEach(
-    (checbox) => {
-      checkedBox.push(checbox.value);
+    (checkbox) => {
+      listCheckedBox.push(checkbox.value);
     }
   );
 
   if (ad.offer.features){
-    const result = checkedBox.every((element) => ad.offer.features.includes(element));
+    const result = listCheckedBox.every((element) => ad.offer.features.includes(element));
     return result;
   }
 };
@@ -83,5 +83,5 @@ const getFilter = () => {
 
 filtersForm.addEventListener('change', debounce(
   () => getFilter(),
-  RERENDER_DELAY)
+  RENDER_DELAY)
 );

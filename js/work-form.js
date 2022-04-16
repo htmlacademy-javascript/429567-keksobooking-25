@@ -1,6 +1,6 @@
-import {isEscapeKey, showAlert, resetForm} from './util.js';
+import {isEscapeKey, resetForm} from './util.js';
 import {MAX_GUEST, MIN_ROOM, MAX_PRICE, LAT_TOKIO, LNG_TOKIO} from './data.js';
-import {apartmentsSettings} from './enum.js';
+import {apartmentsSettings} from './limits.js';
 import {sendData} from './server.js';
 
 const form = document.querySelector('.ad-form');
@@ -13,6 +13,11 @@ const guestSelect = form.querySelector('#capacity');
 
 const errorMessage = document.querySelector('#error');
 const errorElement = errorMessage.content.querySelector('.error').cloneNode(true);
+const errorParagraph = errorElement.querySelector('.error__message');
+const errorButton = errorElement.querySelector('.error__button');
+
+const successMessage = document.querySelector('#success');
+const successElement = successMessage.content.querySelector('.success').cloneNode(true);
 
 const selectTypeAppartment = document.querySelector('#type');
 const typePrice = document.querySelector('#price');
@@ -51,6 +56,9 @@ const enableForm = () => {
   address.value = `${LAT_TOKIO}, ${LNG_TOKIO}`;
 
   form.querySelector('.ad-form__slider').classList.remove('ad-form__slider--disabled');
+};
+
+const enableFilter = () => {
   mapFilters.classList.remove('map__filters--disabled');
   mapSelects.forEach(
     (element) => {
@@ -89,14 +97,33 @@ const onEscKeydown = (evt) => {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
     closeErrorMessage();
+    closeSuccessMessage();
+  }
+};
+
+const onClickEmptyPlaceError = (evt) => {
+  if (evt.target !== errorParagraph && evt.target !== errorButton) {
+    closeErrorMessage();
+  }
+};
+
+const onClickEmptyPlaceSuccsess = (evt) => {
+  if (evt.target !== errorParagraph) {
+    closeSuccessMessage();
   }
 };
 
 function closeErrorMessage () {
   errorElement.remove();
   document.removeEventListener('keydown', onEscKeydown);
+  document.removeEventListener('click', onClickEmptyPlaceError);
 }
 
+function closeSuccessMessage () {
+  successElement.remove();
+  document.removeEventListener('keydown', onEscKeydown);
+  document.removeEventListener('click', onClickEmptyPlaceSuccsess);
+}
 
 const showErrorMessage = (message) => {
   errorElement.querySelector('.error__message').textContent = message;
@@ -106,7 +133,15 @@ const showErrorMessage = (message) => {
     errorElement.remove();
   });
 
-  document.addEventListener('keydown', closeErrorMessage);
+  document.addEventListener('click', onClickEmptyPlaceError);
+  document.addEventListener('keydown', onEscKeydown);
+};
+
+const showSuccessMessage = () => {
+  document.querySelector('body').append(successElement);
+
+  document.addEventListener('click', onClickEmptyPlaceSuccsess);
+  document.addEventListener('keydown', onEscKeydown);
 };
 
 const blockSubmitButton = () => {
@@ -171,15 +206,16 @@ form.addEventListener('submit', (evt) => {
   if (messageValidatePrice) {
     showErrorMessage(messageValidatePrice);
   }
-  else {
+  if (!message && !messageValidatePrice) {
     blockSubmitButton();
     sendData(
       () => {
         unblockSubmitButton();
         resetForm(slider.noUiSlider);
+        showSuccessMessage();
       },
       () => {
-        showAlert('Не удалось отправить форму');
+        showErrorMessage('Не удалось отправить форму');
         unblockSubmitButton();
       },
       new FormData(evt.target)
@@ -201,4 +237,4 @@ resetButton.addEventListener('click', (evt) => {
   resetForm(slider.noUiSlider);
 });
 
-export {disableForm, enableForm};
+export {disableForm, enableForm, enableFilter};

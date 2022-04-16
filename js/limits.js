@@ -1,3 +1,5 @@
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const apartmentsSettings = {
   palace: {
     name: 'Дворец',
@@ -35,7 +37,5 @@ const priceValue = {
     price: 100000
   }
 };
-
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 export {apartmentsSettings, priceValue, FILE_TYPES};

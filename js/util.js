@@ -1,42 +1,6 @@
 import {ALERT_SHOW_TIME, PLACE_HOLDER, LAT_TOKIO, LNG_TOKIO} from './data.js';
 import {resetMainPinMarker} from './map.js';
 
-//Функция возвращает рандомное целое число из диапазона включительно
-function getRandomInt(min, max) {
-  if (min < 0 || max < 0) {
-    throw new Error('negative value');
-  }
-  if (min > max) {
-    [min, max] = [max, min];
-  }
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-//функция возвращает рандомное число с запятое из диапазона включительно. передается точность после запятой
-function getRandomFloat (min, max, accuracy) {
-  if (min < 0 || max <0) {
-    throw new Error('negative float value');
-  }
-  if (min > max) {
-    [min, max] = [max, min];
-  }
-  return getRandomInt (Math.floor(min * Math.pow(10,accuracy)), Math.floor(max * Math.pow(10, accuracy))) / Math.pow(10, accuracy);
-}
-
-//взята с https://learn.javascript.ru/task/shuffle
-function shuffle(arrayInput) {
-  const maxElementArray = getRandomInt(1, arrayInput.length - 1);
-  const array = arrayInput.slice(); //копия массива
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
-
-    // поменять элементы местами
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array.slice(maxElementArray); // обрезаю массив
-}
-
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const showAlert = (message) => {
@@ -65,7 +29,7 @@ const titleForm = document.querySelector('#title');
 const descriptionForm = document.querySelector('#description');
 const featuresCheckBoxes = document.querySelectorAll('.features__checkbox');
 const fileForm = document.querySelector('#images');
-const avatarForm = document.querySelectorAll('#avatar');
+const avatarForm = document.querySelector('#avatar');
 const address = document.querySelector('#address');
 const typePrice = document.querySelector('#price');
 const selectTypeAppartment = document.querySelector('#type');
@@ -73,6 +37,8 @@ const roomSelect = form.querySelector('#room_number');
 const guestSelect = form.querySelector('#capacity');
 const timeIn  = document.querySelector('#timein');
 const timeOut = document.querySelector('#timeout');
+const avatar = document.querySelector('.ad-form-header__preview > img');
+const previewFotos = document.querySelector('.ad-form__photo');
 
 const resetForm = (slider) => {
   titleForm.value = '';
@@ -94,6 +60,8 @@ const resetForm = (slider) => {
   fileForm.value = '';
   avatarForm.value = '';
   resetMainPinMarker();
+  avatar.src = 'img/muffin-grey.svg';
+  previewFotos.style.backgroundImage = 'none';
 };
 
-export {getRandomInt, getRandomFloat, shuffle, isEscapeKey, showAlert, resetForm};
+export {isEscapeKey, showAlert, resetForm};

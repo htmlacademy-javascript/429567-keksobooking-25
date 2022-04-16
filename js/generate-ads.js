@@ -1,4 +1,4 @@
-import {apartmentsSettings} from './enum.js';
+import {apartmentsSettings} from './limits.js';
 import {getRoomsDeclension, getGuestsDeclension} from './get-declension.js';
 
 const adsTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -23,7 +23,7 @@ const generateAds = (ad) => {
       }
     );
   }
-  else { // Не стал добавлять для родителя, малоли поедет верстка
+  else {
     popupFeaturesList.forEach(
       (popupFeaturesItem) => {
         popupFeaturesItem.classList.add('hide');

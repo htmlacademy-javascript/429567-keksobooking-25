@@ -8,7 +8,7 @@ const getData = (onSuccess) => {
       onSuccess(data);
     })
     .catch(() => {
-      showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+      showAlert('произошла ошибка запроса. Попробуйте ещё раз');
     });
 };
 
