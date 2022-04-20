@@ -47,6 +47,15 @@ const disableForm = () => {
   );
 };
 
+const enableFilter = () => {
+  mapFilters.classList.remove('map__filters--disabled');
+  mapSelects.forEach(
+    (element) => {
+      element.disabled = false;
+    }
+  );
+};
+
 const enableForm = () => {
   form.classList.remove('ad-form--disabled');
   formFiledsets.forEach(
@@ -66,15 +75,6 @@ const enableForm = () => {
     );
     enableFilter();
   });
-};
-
-const enableFilter = () => {
-  mapFilters.classList.remove('map__filters--disabled');
-  mapSelects.forEach(
-    (element) => {
-      element.disabled = false;
-    }
-  );
 };
 
 const validateInputData = () => {

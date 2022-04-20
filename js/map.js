@@ -75,6 +75,4 @@ const createMarkers = (ad) => {
     .bindPopup(generateAds(ad));
 };
 
-
-
 export {resetMainPinMarker, markerGroup, createMarkers};
