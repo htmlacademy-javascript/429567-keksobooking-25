@@ -39,6 +39,11 @@ const timeIn  = document.querySelector('#timein');
 const timeOut = document.querySelector('#timeout');
 const avatar = document.querySelector('.ad-form-header__preview > img');
 const previewFotos = document.querySelector('.ad-form__photo');
+const housingType = document.querySelector('#housing-type');
+const housingPrice = document.querySelector('#housing-price');
+const housingRooms = document.querySelector('#housing-rooms');
+const housingGuests = document.querySelector('#housing-guests');
+const housingFeatures = document.querySelector('#housing-features').querySelectorAll('input[type=checkbox]');
 
 const resetForm = (slider) => {
   titleForm.value = '';
@@ -62,6 +67,17 @@ const resetForm = (slider) => {
   resetMainPinMarker();
   avatar.src = 'img/muffin-grey.svg';
   previewFotos.style.backgroundImage = 'none';
+
+  housingType.options[0].selected = 'selected';
+  housingPrice.options[0].selected = 'selected';
+  housingRooms.options[0].selected = 'selected';
+  housingGuests.options[0].selected = 'selected';
+  housingFeatures.forEach(
+    (element) => {
+      element.checked = false;
+    }
+  );
+
 };
 
 export {isEscapeKey, showAlert, resetForm};

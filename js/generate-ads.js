@@ -9,9 +9,9 @@ const generateAds = (ad) => {
   adsElement.querySelector('.popup__text--address').textContent = ad.offer.address;
   adsElement.querySelector('.popup__text--price').textContent = `${ad.offer.price} ₽/ночь`;
 
-  const popupFeaturesList = adsElement.querySelectorAll('.popup__feature');
+  const popupListFeatures = adsElement.querySelectorAll('.popup__feature');
   if (ad.offer.features) {
-    popupFeaturesList.forEach(
+    popupListFeatures.forEach(
       (popupFeaturesItem) => {
         const isNecessary = ad.offer.features.some(
           (userFeature) => popupFeaturesItem.classList.contains(`popup__feature--${userFeature}`),
@@ -24,7 +24,7 @@ const generateAds = (ad) => {
     );
   }
   else {
-    popupFeaturesList.forEach(
+    popupListFeatures.forEach(
       (popupFeaturesItem) => {
         popupFeaturesItem.classList.add('hide');
       }

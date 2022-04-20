@@ -1,10 +1,11 @@
 import {isEscapeKey, resetForm} from './util.js';
-import {MAX_GUEST, MIN_ROOM, MAX_PRICE, LAT_TOKIO, LNG_TOKIO} from './data.js';
+import {MAX_GUEST, MIN_ROOM, MAX_PRICE, LAT_TOKIO, LNG_TOKIO, MAX_ADS} from './data.js';
 import {apartmentsSettings} from './limits.js';
-import {sendData} from './server.js';
+import {sendData, getData} from './server.js';
+import {createMarkers} from './map.js';
 
 const form = document.querySelector('.ad-form');
-const formFiledset = form.querySelectorAll('fieldset');
+const formFiledsets = form.querySelectorAll('fieldset');
 const mapFilters = document.querySelector('.map__filters');
 const mapSelects = mapFilters.querySelectorAll('select');
 
@@ -31,7 +32,7 @@ const resetButton = document.querySelector('.ad-form__reset');
 
 const disableForm = () => {
   form.classList.add('ad-form--disabled');
-  formFiledset.forEach(
+  formFiledsets.forEach(
     (element) => {
       element.disabled = 'disabled';
     }
@@ -48,7 +49,7 @@ const disableForm = () => {
 
 const enableForm = () => {
   form.classList.remove('ad-form--disabled');
-  formFiledset.forEach(
+  formFiledsets.forEach(
     (element) => {
       element.disabled = false;
     }
@@ -56,6 +57,15 @@ const enableForm = () => {
   address.value = `${LAT_TOKIO}, ${LNG_TOKIO}`;
 
   form.querySelector('.ad-form__slider').classList.remove('ad-form__slider--disabled');
+
+  getData((ads) => {
+    ads.slice(0, MAX_ADS).forEach(
+      (ad) => {
+        createMarkers(ad);
+      }
+    );
+    enableFilter();
+  });
 };
 
 const enableFilter = () => {
@@ -67,30 +77,30 @@ const enableFilter = () => {
   );
 };
 
-const checkRoomsAndGuestsAndCoordinate = () => {
+const validateInputData = () => {
+  const errorsList = [];
   const optionRoomsSelect = Number(roomSelect.options[roomSelect.selectedIndex].value);
   const optionGuestsSelect = Number(guestSelect.options[guestSelect.selectedIndex].value);
+  const formTitle = document.querySelector('#title');
   if (optionGuestsSelect > optionRoomsSelect && optionGuestsSelect !== MAX_GUEST && optionRoomsSelect !== MIN_ROOM) {
-    return 'Количество гостей не может быть больше чем количество комнат';
+    errorsList.push('Количество гостей не может быть больше чем количество комнат');
   }
   if (optionGuestsSelect === MIN_ROOM) {
-    return 'Необходим хотя бы 1 гость';
+    errorsList.push('Необходим хотя бы 1 гость');
   }
   if (optionRoomsSelect === MAX_GUEST) {
-    return 'Данный тип не предназначен для гостей';
+    errorsList.push('Данный тип не предназначен для гостей');
   }
   if (address.value === '') {
-    return 'Выберите на карте точку';
+    errorsList.push('Выберите на карте точку');
   }
-  return false;
-};
-
-
-const validatePrice = () => {
   if (typePrice.value <= apartmentsSettings[selectTypeAppartment.value].minPrice) {
-    return `Цена должна быть выше ${apartmentsSettings[selectTypeAppartment.value].minPrice}`;
+    errorsList.push(`Цена должна быть выше ${apartmentsSettings[selectTypeAppartment.value].minPrice}`);
   }
-  return false;
+  if (formTitle.value.length < 30 || formTitle.value.length > 100) {
+    errorsList.push('Заголовок должен быть больше 30 символов, но не больше 100');
+  }
+  return errorsList;
 };
 
 const onEscKeydown = (evt) => {
@@ -126,7 +136,11 @@ function closeSuccessMessage () {
 }
 
 const showErrorMessage = (message) => {
-  errorElement.querySelector('.error__message').textContent = message;
+  let textError = '';
+  for (let i = 0; i< message.length; i++) {
+    textError += `${message[i]} <br/>`;
+  }
+  errorElement.querySelector('.error__message').innerHTML = textError;
   document.querySelector('body').append(errorElement);
 
   errorElement.querySelector('.error__button').addEventListener('click', () => {
@@ -198,15 +212,11 @@ noUiSlider.create(slider, {
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const message = checkRoomsAndGuestsAndCoordinate();
-  const messageValidatePrice = validatePrice();
-  if (message) {
+  const message = validateInputData();
+  if (message.length > 0) {
     showErrorMessage(message);
   }
-  if (messageValidatePrice) {
-    showErrorMessage(messageValidatePrice);
-  }
-  if (!message && !messageValidatePrice) {
+  else {
     blockSubmitButton();
     sendData(
       () => {

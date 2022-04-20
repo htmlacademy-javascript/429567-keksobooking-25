@@ -50,21 +50,22 @@ const checkGuests = (ad) => {
 
 const checkFeatures = (ad) => {
   const checkedCheckboxes = document.querySelector('#housing-features').querySelectorAll('[name="features"]:checked');
-  const listCheckedBox = [];
+  const listCheckedBoxes = [];
 
   checkedCheckboxes.forEach(
     (checkbox) => {
-      listCheckedBox.push(checkbox.value);
+      listCheckedBoxes.push(checkbox.value);
     }
   );
 
   if (ad.offer.features){
-    const result = listCheckedBox.every((element) => ad.offer.features.includes(element));
+    const result = listCheckedBoxes.every((element) => ad.offer.features.includes(element));
     return result;
   }
 };
 
 const getFilter = () => {
+  markerGroup.clearLayers();
   getData((ads) => {
     ads.slice()
       .filter(checkType)

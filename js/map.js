@@ -1,6 +1,5 @@
-import {disableForm, enableForm, enableFilter} from './work-form.js';
-import {LAT_TOKIO, LNG_TOKIO, MAP_SCALING, PIN_SIZE, ROUNDING_VALUE, AD_PIN_SIZE, MAX_ADS} from './data.js';
-import {getData} from './server.js';
+import {disableForm, enableForm} from './work-form.js';
+import {LAT_TOKIO, LNG_TOKIO, MAP_SCALING, PIN_SIZE, ROUNDING_VALUE, AD_PIN_SIZE} from './data.js';
 import {generateAds} from './generate-ads.js';
 
 
@@ -76,13 +75,6 @@ const createMarkers = (ad) => {
     .bindPopup(generateAds(ad));
 };
 
-getData((ads) => {
-  ads.slice(0, MAX_ADS).forEach(
-    (ad) => {
-      createMarkers(ad);
-    }
-  );
-  enableFilter();
-});
+
 
 export {resetMainPinMarker, markerGroup, createMarkers};
